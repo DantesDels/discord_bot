@@ -8,12 +8,12 @@ version = '1.0'
 
 repositories {
     mavenCentral()
-    maven { url "https://m2.dv8tion.net/releases" }
+    maven { url "https://mvnrepository.com/artifact/net.dv8tion/JDA" }
 }
 
 dependencies {
     // JDA for Discord API interactions
-    implementation "net.dv8tion:JDA:5.0.0-beta.20"
+    implementation "net.dv8tion:JDA:6.4.1"
     // SLF4J Simple for logging, cannot launch without a logging implementation, but can be replaced with another one if needed
     implementation "org.slf4j:slf4j-simple:2.0.7"
 }
@@ -24,6 +24,10 @@ application {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(26)
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release.set(17) 
 }
