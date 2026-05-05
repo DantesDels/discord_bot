@@ -25,8 +25,19 @@ application {
     mainClass = 'fr.delversebastien.bot.Main'
 }
 
+// You shall endure agony if you use any other version that is not Java 21,
+// because JDA is not compatible with it, 
+// and you will have a bad time trying to make it work (like I did, trust me, I know what I'm talking about), 
+// so we will use Java 21 which is the latest LTS version and is compatible with JDA, 
+// and also has some nice features that we can use in our code, so it's a win-win situation for everyone.
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.named('wrapper') {
+    gradleVersion = '9.5.0'
+    distributionType = Wrapper.DistributionType.ALL
 }
