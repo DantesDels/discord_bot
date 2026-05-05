@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'application' 
+}
+
+group = 'fr.delversebastien'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url "https://m2.dv8tion.net/releases" }
+}
+
+dependencies {
+    // JDA for Discord API interactions
+    implementation "net.dv8tion:JDA:5.0.0-beta.20"
+    // SLF4J Simple for logging, cannot launch without a logging implementation, but can be replaced with another one if needed
+    implementation "org.slf4j:slf4j-simple:2.0.7"
+}
+
+application {
+    mainClass = 'fr.delversebastien.bot.Main'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
