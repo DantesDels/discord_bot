@@ -1,33 +1,41 @@
 package fr.delversebastien.bot.command;
 
 import java.awt.Color;
-import java.util.List;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 public class PollCommand implements ICommand {
+
     @Override
     public String getName() { return "poll"; }
 
     @Override
-    public String getDescription() { return "Crée un sondage. Usage: !poll Question | Choix 1 | Choix 2"; }
+    public String getDescription() { return "Crée un sondage interactif."; }
 
     @Override
-    public void execute(MessageReceivedEvent event, List<String> args) {
-        String content = String.join(" ", args);
-        String[] parts = content.split("\\|");
+    public CommandData getCommandData() {
+        return Commands.slash(getName(), getDescription())
+                .addOptions(
+                    new OptionData(OptionType.STRING, "question", "La question du sondage", true),
+                    new OptionData(OptionType.STRING, "choix1", "La première option", true),
+                    new OptionData(OptionType.STRING, "choix2", "La deuxième option", true)
+                );
+    }
 
-        if (parts.length < 3) {
-            event.getChannel().sendMessage("Usage correct : `!poll Question | Option 1 | Option 2`").queue();
-            return;
-        }
+    @Override
+    public void execute(SlashCommandInteractionEvent event) {
+        // 1. Récupération des options saisies par l'utilisateur
+        String question = event.getOption("question").getAsString();
+        String option1 = event.getOption("choix1").getAsString();
+        String option2 = event.getOption("choix2").getAsString();
 
-        String question = parts[0].trim();
-        String option1 = parts[1].trim();
-        String option2 = parts[2].trim();
-
+        // 2. Construction de l'Embed
         EmbedBuilder embed = new EmbedBuilder()
             .setTitle("📊 Sondage")
             .setDescription(question)
@@ -36,9 +44,14 @@ public class PollCommand implements ICommand {
             .setColor(Color.ORANGE)
             .setFooter("Votez en cliquant sur les réactions ci-dessous !");
 
-        event.getChannel().sendMessageEmbeds(embed.build()).queue(message -> {
-            message.addReaction(Emoji.fromUnicode("1️⃣")).queue();
-            message.addReaction(Emoji.fromUnicode("2️⃣")).queue();
+        // 3. Envoi de la réponse
+        // On utilise reply() car c'est une Slash Command[cite: 1]
+        event.replyEmbeds(embed.build()).queue(interactionHook -> {
+            // Une fois le message envoyé, on ajoute les réactions sur le message original[cite: 1]
+            interactionHook.retrieveOriginal().queue(message -> {
+                message.addReaction(Emoji.fromUnicode("1️⃣")).queue();
+                message.addReaction(Emoji.fromUnicode("2️⃣")).queue();
+            });
         });
     }
 }

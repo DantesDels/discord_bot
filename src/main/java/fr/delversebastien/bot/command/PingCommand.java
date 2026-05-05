@@ -11,6 +11,6 @@ public class PingCommand implements ICommand {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
-        event.reply("Pong! 🏓").queue();
+        event.reply("Pong !").queue();
     }
 }

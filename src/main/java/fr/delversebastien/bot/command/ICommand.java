@@ -1,30 +1,31 @@
 package fr.delversebastien.bot.command;
 
-import java.util.List;
-
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 public interface ICommand {
+    /**
+     * @return Le nom de la commande (ex: "ping")
+     */
     String getName();
+
+    /**
+     * @return La description affichée dans le menu Discord
+     */
     String getDescription();
 
-    // Keeping both execute methods with default empty implementations 
-    // allows us to implement only the relevant one in each command class, 
-    // without forcing us to provide an implementation for both. This way, 
-    // a command can choose to be either a message-based command, a slash command, or both, 
-    // without unnecessary boilerplate.
-    default void execute(MessageReceivedEvent event, List<String> args) {}
+    /**
+     * Méthode d'exécution principale pour les Slash Commands.
+     * @param event L'événement d'interaction envoyé par Discord.
+     */
+    void execute(SlashCommandInteractionEvent event);
 
-    // For the slash command version
-    default void execute(SlashCommandInteractionEvent event) {}
-
+    /**
+     * Génère les données de la commande pour l'enregistrement auprès de Discord.
+     * @return Un objet CommandData.
+     */
     default CommandData getCommandData() {
-        return Commands.slash(
-            getName(), 
-            getDescription()
-        );
+        return Commands.slash(getName(), getDescription());
     }
 }

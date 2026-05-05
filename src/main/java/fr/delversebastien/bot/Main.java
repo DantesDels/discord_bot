@@ -42,7 +42,7 @@ public class Main {
 
         jda.updateCommands().addCommands(manager.getSlashCommandsData()).queue();
 
-        System.out.println("Slash Commands synchronisées !");
-        System.out.println("Boris le Bot est prêt !");
+        System.out.println("Slash Commands synchronysed !");
+        System.out.println("Boris the Bot is using JDK 21 and Gradle 9.5.0, Remember that...");
     }
 }
