@@ -1,9 +1,10 @@
 package fr.delversebastien.bot.listener;
 
+import org.jetbrains.annotations.NotNull;
+
 import fr.delversebastien.bot.command.CommandManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.jetbrains.annotations.NotNull;
 
 public class CommandListener extends ListenerAdapter {
     private final CommandManager manager;

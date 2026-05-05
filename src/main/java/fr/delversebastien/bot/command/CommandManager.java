@@ -33,6 +33,9 @@ public class CommandManager {
 
         if (commands.containsKey(commandName)) {
             commands.get(commandName).execute(event, args);
+        } else {
+            event.getChannel().sendMessage("❌ Commande inconnue. Tapez `!help` pour voir la liste.")
+                 .queue(msg -> msg.delete().queueAfter(5, java.util.concurrent.TimeUnit.SECONDS));
         }
     }
 }
