@@ -1,6 +1,11 @@
 package fr.delversebastien.bot;
 
-import fr.delversebastien.bot.listener.PingListener;
+import fr.delversebastien.bot.command.CommandManager;
+import fr.delversebastien.bot.command.HelpCommand;
+import fr.delversebastien.bot.command.JokeCommand;
+import fr.delversebastien.bot.command.PingCommand;
+import fr.delversebastien.bot.command.PollCommand;
+import fr.delversebastien.bot.listener.CommandListener;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -15,9 +20,18 @@ public class Main {
             return;
         }
 
+        CommandManager manager = new CommandManager();
+        manager.addCommand(new PingCommand());
+        manager.addCommand(new HelpCommand(manager));
+        manager.addCommand(new JokeCommand());
+        manager.addCommand(new PollCommand());
+
         JDABuilder.createDefault(token)
-            .enableIntents(GatewayIntent.MESSAGE_CONTENT) // Requis pour lire !ping
-            .addEventListeners(new PingListener())
+        
+            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+            .addEventListeners(new CommandListener(manager)) 
             .build();
+            
+        System.out.println("Boris le Bot est en cours de démarrage...");
     }
 }
