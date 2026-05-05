@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 
 public class CommandManager {
     private final Map<String, ICommand> commands = new HashMap<>();
@@ -44,5 +46,18 @@ public class CommandManager {
         } else {
             event.getChannel().sendMessage("❌ Commande inconnue.").queue();
         }
+    }
+
+    public void handleSlash(SlashCommandInteractionEvent event) {
+        ICommand cmd = commands.get(event.getName().toLowerCase());
+        if (cmd != null) {
+            cmd.execute(event);
+        }
+    }
+
+    public List<CommandData> getSlashCommandsData() {
+        return commands.values().stream()
+                .map(ICommand::getCommandData)
+                .toList();
     }
 }

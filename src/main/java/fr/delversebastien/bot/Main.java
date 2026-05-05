@@ -7,6 +7,7 @@ import fr.delversebastien.bot.command.PingCommand;
 import fr.delversebastien.bot.command.PollCommand;
 import fr.delversebastien.bot.listener.CommandListener;
 import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
@@ -26,12 +27,22 @@ public class Main {
         manager.addCommand(new JokeCommand());
         manager.addCommand(new PollCommand());
 
-        JDABuilder.createDefault(token)
-        
-            .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-            .addEventListeners(new CommandListener(manager)) 
-            .build();
-            
-        System.out.println("Boris le Bot est en cours de démarrage...");
+       JDA jda = JDABuilder.createDefault(token)
+        .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+        .addEventListeners(new CommandListener(manager))
+        .build();
+
+        try {
+            jda.awaitReady();
+        } catch (Exception e) {
+            System.err.println("ERREUR : Impossible de se connecter à Discord");
+            e.printStackTrace();
+            return;
+        }; 
+
+        jda.updateCommands().addCommands(manager.getSlashCommandsData()).queue();
+
+        System.out.println("Slash Commands synchronisées !");
+        System.out.println("Boris le Bot est prêt !");
     }
 }

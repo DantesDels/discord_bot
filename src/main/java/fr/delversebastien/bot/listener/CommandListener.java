@@ -1,10 +1,9 @@
 package fr.delversebastien.bot.listener;
 
-import org.jetbrains.annotations.NotNull;
-
 import fr.delversebastien.bot.command.CommandManager;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandListener extends ListenerAdapter {
     private final CommandManager manager;
@@ -14,8 +13,7 @@ public class CommandListener extends ListenerAdapter {
     }
 
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) return;
-        manager.handle(event);
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
+        manager.handleSlash(event);
     }
 }

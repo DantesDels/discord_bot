@@ -1,8 +1,6 @@
 package fr.delversebastien.bot.command;
 
-import java.util.List;
-
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class PingCommand implements ICommand {
     @Override
@@ -12,7 +10,7 @@ public class PingCommand implements ICommand {
     public String getDescription() { return "Répond par Pong!"; }
 
     @Override
-    public void execute(MessageReceivedEvent event, List<String> args) {
-        event.getChannel().sendMessage("Pong! JE FONCTIONNE CONNARD MWHAHAHAHAHA ! JE SUIS VIVANT !!!").queue();
+    public void execute(SlashCommandInteractionEvent event) {
+        event.reply("Pong! 🏓").queue();
     }
 }
