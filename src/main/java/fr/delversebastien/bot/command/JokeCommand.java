@@ -28,10 +28,15 @@ public class JokeCommand implements ICommand {
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(body -> {
-                    JSONObject json = new JSONObject(body);
-                    String setup = json.getString("setup");
-                    String punchline = json.getString("punchline");
-                    event.getChannel().sendMessage("**" + setup + "**\n*" + punchline + "*").queue();
+                    try {
+                        JSONObject json = new JSONObject(body);
+                        String setup = json.getString("setup");
+                        String punchline = json.getString("punchline");
+                        event.getChannel().sendMessage("**" + setup + "**\n*" + punchline + "*").queue();
+                    } catch (Exception e) {
+                        event.getChannel().sendMessage("⚠️ Erreur lors de la récupération de la blague...").queue();
+                        System.err.println("Erreur JSON Joke API : " + e.getMessage());
+                    }
                 });
     }
 }

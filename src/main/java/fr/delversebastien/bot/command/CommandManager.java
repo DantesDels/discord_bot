@@ -28,14 +28,21 @@ public class CommandManager {
         if (!raw.startsWith(PREFIX)) return;
 
         List<String> split = Arrays.asList(raw.replaceFirst(PREFIX, "").split("\\s+"));
+        if (split.isEmpty()) return;
+
         String commandName = split.get(0).toLowerCase();
         List<String> args = split.subList(1, split.size());
+
+        System.out.println("----------------------------------------------");
+        System.out.println("LOG [" + java.time.LocalTime.now().withNano(0) + "]");
+        System.out.println("COMMANDE : " + commandName);
+        System.out.println("AUTEUR   : " + event.getAuthor().getName());
+        System.out.println("----------------------------------------------");
 
         if (commands.containsKey(commandName)) {
             commands.get(commandName).execute(event, args);
         } else {
-            event.getChannel().sendMessage("❌ Commande inconnue. Tapez `!help` pour voir la liste.")
-                 .queue(msg -> msg.delete().queueAfter(5, java.util.concurrent.TimeUnit.SECONDS));
+            event.getChannel().sendMessage("❌ Commande inconnue.").queue();
         }
     }
 }
